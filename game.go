@@ -2,17 +2,26 @@ package monopoly
 
 import (
 	"fmt"
+	"math/rand"
 	"strings"
 )
 
 // Game represents a game of Monopoly.
 type Game struct {
-	players []*Player
+	players     []*Player
+	currentTurn int
 }
 
 // NewGame creates a new game of Monopoly and initializes it with the default state.
 func NewGame(players ...Token) *Game {
-	g := &Game{}
+	if len(players) < 2 {
+		return nil
+	}
+
+	g := &Game{
+		players:     make([]*Player, 0, len(players)),
+		currentTurn: rand.Intn(len(players)),
+	}
 	for _, t := range players {
 		g.players = append(g.players, InitPlayer(t))
 	}
