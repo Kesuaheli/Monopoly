@@ -10,6 +10,10 @@ import (
 type Game struct {
 	players     []*Player
 	currentTurn int
+
+	lastRoll      uint8 // 2 dice encoded in 2 blocks of 4 bit
+	doubblesCount int
+	state         GameState
 }
 
 // NewGame creates a new game of Monopoly and initializes it with the default state.
@@ -23,7 +27,7 @@ func NewGame(players ...Token) *Game {
 		currentTurn: rand.Intn(len(players)),
 	}
 	for _, t := range players {
-		g.players = append(g.players, InitPlayer(t))
+		g.players = append(g.players, InitPlayer(g, t))
 	}
 	return g
 }
@@ -53,6 +57,10 @@ func (g Game) GetPlayer(t Token) *Player {
 	return nil
 }
 
+func (g Game) GetCurrentPlayer() (*Player, GameState) {
+	return g.players[g.currentTurn], g.state
+}
+
 func (g Game) GetPlayerForProperty(prop Property) (*Player, PropertyState, bool) {
 	for _, player := range g.players {
 		player.invLock.Lock()
@@ -69,4 +77,29 @@ func (g Game) GetPlayerForProperty(prop Property) (*Player, PropertyState, bool)
 func (g Game) IsPropertyAvailable(prop Property) bool {
 	_, _, isSold := g.GetPlayerForProperty(prop)
 	return !isSold
+}
+
+func (g *Game) rollDice() (int, int) {
+	d1, d2 := RollDice()
+	g.lastRoll = uint8(d1<<4 | d2&(1<<4-1))
+	return d1, d2
+}
+
+func (g *Game) setLastRoll(d1 int, d2 int) {
+	g.lastRoll = uint8(d1<<4 | d2&(1<<4-1))
+}
+
+func (g Game) getLastRoll() (int, int) {
+	return int(g.lastRoll >> 4), int(g.lastRoll & (1<<4 - 1))
+}
+
+func RollDice() (int, int) {
+	return rand.Intn(6) + 1, rand.Intn(6) + 1
+}
+
+func (g *Game) nextPlayer() {
+	g.currentTurn++
+	if g.currentTurn >= len(g.players) {
+		g.currentTurn = 0
+	}
 }

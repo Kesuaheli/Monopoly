@@ -41,15 +41,18 @@ func (inv Inventory) GoString() string {
 }
 
 type Player struct {
-	token     Token
-	position  Field
-	money     int
-	inventory Inventory
-	invLock   sync.Mutex
+	game         *Game
+	token        Token
+	position     Field
+	money        int
+	inventory    Inventory
+	invLock      sync.Mutex
+	roundsInJail int
 }
 
-func InitPlayer(t Token) *Player {
+func InitPlayer(g *Game, t Token) *Player {
 	return &Player{
+		game:      g,
 		token:     t,
 		position:  GO,
 		money:     startMoney,
@@ -69,8 +72,21 @@ func (p *Player) GetBalance() int {
 	return p.money
 }
 
-func (p *Player) BuyProperty(g *Game, prop Property) bool {
-	if !g.IsPropertyAvailable(prop) {
+func (p *Player) CanBuyProperty() (bool, Property) {
+	prop, ok := p.position.Property()
+	if !ok {
+		return false, -1
+	}
+	if p.money < prop.GetBaseCost() {
+		return false, -1
+	}
+
+	return p.game.IsPropertyAvailable(prop), prop
+}
+
+func (p *Player) BuyProperty() bool {
+	canBuy, prop := p.CanBuyProperty()
+	if !canBuy {
 		return false
 	}
 	p.money -= prop.GetBaseCost()
@@ -164,4 +180,70 @@ func (p *Player) SellHouse(prop Property) (PropertyState, bool) {
 	p.inventory[prop] -= 1
 
 	return p.inventory[prop], true
+}
+
+func (p *Player) RollDice() (int, int, Field) {
+	if p.game.state != GAME_TURN_START {
+		return -1, -1, -1
+	}
+	if curr, _ := p.game.GetCurrentPlayer(); curr != p {
+		return -1, -1, -1
+	}
+
+	d1, d2 := p.game.rollDice()
+	p.game.state = GAME_ROLLED_DICE
+
+	if d1 == d2 {
+		p.game.doubblesCount++
+		if p.game.doubblesCount == 4 {
+			return d1, d2, IN_JAIL
+		}
+	} else {
+		p.game.doubblesCount = 0
+	}
+
+	return d1, d2, (p.position + Field(d1+d2)) % IN_JAIL
+}
+
+func (p *Player) Move() Field {
+	if p.game.state != GAME_ROLLED_DICE {
+		return -1
+	}
+	if curr, _ := p.game.GetCurrentPlayer(); curr != p {
+		return -1
+	}
+
+	d1, d2 := p.game.getLastRoll()
+	p.game.state = GAME_TURN
+	if d1 == d2 {
+		if p.game.doubblesCount == 4 {
+			p.position = IN_JAIL
+			p.game.doubblesCount = 0
+			return IN_JAIL
+		}
+		if p.position == IN_JAIL {
+			p.position = JUST_VISITING
+		}
+	}
+
+	p.position = p.position + Field(d1+d2)
+	if p.position >= IN_JAIL {
+		fmt.Printf("Player %s crossed %s\n", p.token, GO)
+		p.position = p.position % IN_JAIL
+	}
+	return p.position
+}
+
+func (p *Player) EndTurn() {
+	if p.game.state != GAME_TURN {
+		return
+	}
+	if curr, _ := p.game.GetCurrentPlayer(); curr != p {
+		return
+	}
+
+	if p.game.doubblesCount == 0 {
+		p.game.nextPlayer()
+	}
+	p.game.state = GAME_TURN_START
 }
