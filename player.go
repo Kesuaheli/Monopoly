@@ -234,16 +234,20 @@ func (p *Player) Move() Field {
 	return p.position
 }
 
-func (p *Player) EndTurn() {
+func (p *Player) EndTurn() (again bool) {
 	if p.game.state != GAME_TURN {
-		return
+		return false
 	}
 	if curr, _ := p.game.GetCurrentPlayer(); curr != p {
-		return
+		return false
 	}
 
 	if p.game.doubblesCount == 0 {
 		p.game.nextPlayer()
+		again = false
+	} else {
+		again = true
 	}
 	p.game.state = GAME_TURN_START
+	return again
 }

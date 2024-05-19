@@ -36,8 +36,9 @@ func main() {
 				fmt.Printf("  - Didn't buy %s\n", prop)
 			}
 			fmt.Print("  - Ended turn\n")
-			p.EndTurn()
-			turn++
+			if again := p.EndTurn(); !again {
+				turn++
+			}
 		}
 
 	}
