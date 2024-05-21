@@ -61,7 +61,7 @@ func InitPlayer(g *Game, t Token) *Player {
 }
 
 func (p *Player) String() string {
-	return fmt.Sprintf("%s ($%d) is on %s and owns %s.", p.token, p.money, p.position, p.inventory)
+	return fmt.Sprintf("%s ($%d) is on %s and owns %s.", p.token, p.money, p.position.Localize(p.game.Language), p.inventory)
 }
 
 func (p *Player) GoString() string {

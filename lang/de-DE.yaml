@@ -1,0 +1,43 @@
+monopoly:
+  field:
+    go: LOS
+    mediterranean_avenue: Badstraße
+    community_chest_1: Gemeinschaftsfeld 1
+    baltic_avenue: Turmstraße
+    income_tax: Einkommenssteuer
+    reading_railroad: Südbahnhof
+    oriental_avenue: Chausseestraße
+    chance_1: Ereignisfeld 1
+    vermont_avenue: Elisenstraße
+    connecticut_avenue: Poststraße
+    just_visiting: Nur zu Besuch
+    st_charles_place: Seestraße
+    electric_company: Elektrizitätswerk
+    states_avenue: Hafenstraße
+    virginia_avenue: Neue Straße
+    pennsylvania_railroad: Westbahnhof
+    st_james_place: Münchner Straße
+    community_chest_2: Gemeinschaftsfeld 2
+    tennessee_avenue: Wiener Straße
+    new_york_avenue: Berliner Straße
+    free_parking: Frei Parken
+    kentucky_avenue: Theaterstraße
+    chance_2: Ereignisfeld 2
+    indiana_avenue: Museumstraße
+    illinois_avenue: Opernplatz
+    baltimore_ohio_railroad: Nordbahnhof
+    atlantic_avenue: Lessingstraße
+    ventnor_avenue: Schillerstraße
+    water_works: Wasserwerk
+    marvin_gardens: Goethestraße
+    go_to_jail: Gehe ins Gefängnis
+    pacific_avenue: Rathausplatz
+    north_carolina_avenue: Hauptstraße
+    community_chest_3: Gemeinschaftsfeld 3
+    pennsylvania_avenue: Bahnhofstraße
+    short_line: Hauptbahnhof
+    chance_3: Ereignisfeld 3
+    park_place: Parkstraße
+    luxery_tax: Zusatzsteuer
+    boardwalk: Schlossallee
+    in_jail: Im Gefängnis

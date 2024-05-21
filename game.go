@@ -4,10 +4,15 @@ import (
 	"fmt"
 	"math/rand"
 	"strings"
+
+	"golang.org/x/text/language"
 )
 
 // Game represents a game of Monopoly.
 type Game struct {
+	// Language is the language used when printing names and messages
+	Language language.Tag
+
 	players     []*Player
 	currentTurn int
 
@@ -46,6 +51,11 @@ func (g Game) GoString() string {
 		players = append(players, player.GoString())
 	}
 	return "{players: " + strings.Join(players, ", ") + "}"
+}
+
+// SetLanguage sets the language used when printing names and messages
+func (g *Game) SetLanguage(langTag language.Tag) {
+	g.Language = langTag
 }
 
 func (g Game) GetPlayer(t Token) *Player {
