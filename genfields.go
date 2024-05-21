@@ -30,57 +30,57 @@ var (
 	)
 )
 
-const fieldConvertionTemplate = `{{range $type := .}}
-// String returns the english name for {{ $type.Name | short}}.
+const fieldTemplate = `{{ range $type := . }}
+// String returns the english name for {{ $type.Name | short }}.
 // String implements [fmt.Stringer] interface.
-func ({{$type.Name | short}} {{$type.Name}}) String() string {
-	return {{$type.Name | short}}.Localize(language.English)
+func ({{ $type.Name | short }} {{ $type.Name }}) String() string {
+	return {{ $type.Name | short }}.Localize(language.English)
 }
 
-// Localize returns the localized name for {{$type.Name | short}} in the language langTag.
-func ({{$type.Name | short}} {{$type.Name}}) Localize(langTag language.Tag) string {
-	{{- range $childType := $}}{{if eq $childType.Parent $type.Name}}
-	if {{$childType.Name | short}}, ok := {{$type.Name |short}}.{{$childType.Name}}(); ok {
-		return {{$childType.Name | short}}.Localize(langTag)
+// Localize returns the localized name for {{ $type.Name | short }} in the language langTag.
+func ({{ $type.Name | short }} {{ $type.Name }}) Localize(langTag language.Tag) string {
+	{{ - range $childType := $ }}{{ if eq $childType.Parent $type.Name }}
+	if {{ $childType.Name | short }}, ok := {{ $type.Name | short }}.{{ $childType.Name }}(); ok {
+		return {{ $childType.Name | short }}.Localize(langTag)
 	}
-{{end}}{{end}}
-	switch {{$type.Name | short}} {
-	{{- range $value := $type.Values }}
+{{ end }}{{ end }}
+	switch {{ $type.Name | short }} {
+	{{ - range $value := $type.Values }}
 	case {{ $value }}:
-		return lang.MustLocalize("monopoly.field.{{ $value | lower}}", langTag){{end}}
+		return lang.MustLocalize("monopoly.field.{{ $value | lower }}", langTag){{ end }}
 	default:
 		return "UNKNOWN"
 	}
 }
 
 // GoString implements [fmt.GoStringer] interface.
-func ({{$type.Name | short}} {{$type.Name}}) GoString() string {
-	{{- range $childType := $}}{{if eq $childType.Parent $type.Name}}
-	if {{$childType.Name | short}}, ok := {{$type.Name |short}}.{{$childType.Name}}(); ok {
-		return {{$childType.Name | short}}.GoString()
+func ({{ $type.Name | short }} {{ $type.Name }}) GoString() string {
+	{{ - range $childType := $ }}{{ if eq $childType.Parent $type.Name }}
+	if {{ $childType.Name | short }}, ok := {{ $type.Name | short }}.{{ $childType.Name }}(); ok {
+		return {{ $childType.Name | short }}.GoString()
 	}
-{{end}}{{end}}
-	switch {{$type.Name | short}} {
-	{{- range $value := $type.Values }}
-	case {{$value}}:
-		return "{{$value}}"{{end}}
+{{ end }}{{ end }}
+	switch {{ $type.Name | short }} {
+	{{ - range $value := $type.Values }}
+	case {{ $value }}:
+		return "{{ $value }}"{{ end }}
 	default:
 		return "UNKNOWN"
 	}
 }
-{{range $childType := $}}{{if eq $childType.Parent $type.Name}}
-// {{$childType.Name}} converts a [{{$type.Name}}] into a [{{$childType.Name}}] and reports weather {{$type.Name | short}} is a {{$childType.Name}}.
-func ({{$type.Name | short}} {{$type.Name}}) {{$childType.Name}}() ({{$childType.Name}}, bool) {
-	switch {{$childType.Name | short}} := {{$childType.Name}}({{$type.Name | short}}); {{$childType.Name | short}} {
-	case {{range $index, $value := $childType.Values}}{{$value}}{{if ne $index (sub1 (len $childType.Values))}},
-		{{end}}{{end}}{{ range $otherType := $}}{{if eq $otherType.Parent $childType.Name}}{{range $value := $otherType.Values}},
-		{{$otherType.Parent}}({{$value}}){{end}}{{end}}{{end}}:
-		return {{$childType.Name | short}}, true
+{{ range $childType := $ }}{{ if eq $childType.Parent $type.Name }}
+// {{ $childType.Name }} converts a [{{ $type.Name }}] into a [{{ $childType.Name }}] and reports weather {{ $type.Name | short }} is a {{ $childType.Name }}.
+func ({{ $type.Name | short }} {{ $type.Name }}) {{ $childType.Name }}() ({{ $childType.Name }}, bool) {
+	switch {{ $childType.Name | short }} := {{ $childType.Name }}({{ $type.Name | short }}); {{ $childType.Name | short }} {
+	case {{ range $index, $value := $childType.Values }}{{ $value }}{{ if ne $index (sub1 (len $childType.Values)) }},
+		{{ end }}{{ end }}{{ range $otherType := $ }}{{ if eq $otherType.Parent $childType.Name }}{{ range $value := $otherType.Values }},
+		{{ $otherType.Parent }}({{ $value }}){{ end }}{{ end }}{{ end }}:
+		return {{ $childType.Name | short }}, true
 	default:
 		return -1, false
 	}
 }
-{{end}}{{end}}{{end}}`
+{{ end }}{{ end }}{{ end }}`
 
 func init() {
 	flag.Parse()
@@ -93,7 +93,7 @@ func main() {
 			"short": func(s string) string { return strings.ToLower(s[0:1]) },
 			"sub1":  func(n int) int { return n - 1 },
 		}).
-		Parse(fieldConvertionTemplate)
+		Parse(fieldTemplate)
 	if err != nil {
 		log.Fatalf("Failed to parse field conversion template: %v", err)
 	}
