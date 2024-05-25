@@ -50,3 +50,36 @@ monopoly:
     house.3: with 3 houses
     house.4: with 4 houses
     hotel: with hotel
+  token:
+    boot: Boot
+    boot.description: A single boot
+    cake: Cake
+    cake.description: A delicious cake
+    car: Car
+    car.description: A fast car (actually not necessarily faster)
+    cat: Cat
+    cat.description: A cute cat
+    dog: Dog
+    dog.description: A not so cute dog
+    duck: Duck
+    duck.description: A rubber duck
+    hat: Hat
+    hat.description: A fancy top hat
+    horse: Horse
+    horse.description: A jumping horse with a rider
+    iron: Iron
+    iron.description: A hot iron
+    money_bag: Money Bag
+    money_bag.description: A bag full of money
+    penguin: Penguin
+    penguin.description: A clumsy penguin
+    ship: Ship
+    ship.description: A heavy battleship
+    thimble: Thimble
+    thimble.description: A protecting thimble
+    train: Train
+    train.description: A cool steam locomotive
+    unicorn: Unicorn
+    unicorn.description: A rare unicorn
+    weelbarrow: Weelbarrow
+    weelbarrow.description: A supporting weelbarrow

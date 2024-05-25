@@ -67,7 +67,7 @@ func InitPlayer(g *Game, t Token) *Player {
 }
 
 func (p *Player) String() string {
-	return fmt.Sprintf("%s ($%d) is on %s and owns %s.", p.token, p.money, p.position.Localize(p.game.Language), p.inventory.Localize(p.game.Language))
+	return fmt.Sprintf("%s ($%d) is on %s and owns %s.", p.token.Localize(p.game.Language), p.money, p.position.Localize(p.game.Language), p.inventory.Localize(p.game.Language))
 }
 
 func (p *Player) GoString() string {
@@ -234,7 +234,7 @@ func (p *Player) Move() Field {
 
 	p.position = p.position + Field(d1+d2)
 	if p.position >= IN_JAIL {
-		fmt.Printf("Player %s crossed %s\n", p.token, GO)
+		fmt.Printf("Player %s crossed %s\n", p.token.Localize(p.game.Language), GO.Localize(p.game.Language))
 		p.position = p.position % IN_JAIL
 	}
 	return p.position

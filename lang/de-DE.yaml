@@ -50,3 +50,36 @@ monopoly:
     house.3: mit 3 Häusern
     house.4: mit 4 Häusern
     hotel: mit Hotel
+  token:
+    boot: Schuh
+    boot.description: Ein einzelner Schuh
+    cake: Kuchen
+    cake.description: Ein leckerer Kuchen
+    car: Auto
+    car.description: Ein schnelles Auto (nicht unbedingt schneller)
+    cat: Katze
+    cat.description: Eine süße Katze
+    dog: Hund
+    dog.description: Ein nicht so süßer Hund
+    duck: Ente
+    duck.description: Eine Gummiente
+    hat: Hut
+    hat.description: Ein stylischer Hut
+    horse: Pferd
+    horse.description: Ein springendes Pferd mit einem Reiter
+    iron: Bügeleisen
+    iron.description: Ein heißes Bügeleisen
+    money_bag: Geldsack
+    money_bag.description: Ein Sack voll Geld
+    penguin: Pinguin
+    penguin.description: Ein tollpatschiger Pinguin
+    ship: Schiff
+    ship.description: Ein schweres Schiff
+    thimble: Fingerhut
+    thimble.description: Ein schützender Fingerhut
+    train: Zug
+    train.description: Eine interessante Dampflokomotive
+    unicorn: Einhorn
+    unicorn.description: Ein seltenes Einhorn
+    weelbarrow: Schubkarre
+    weelbarrow.description: Eine unterstützende Schubkarre
