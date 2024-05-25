@@ -19,7 +19,7 @@ const (
 	VERMONT_AVENUE          Property = iota
 	CONNECTICUT_AVENUE      Property = iota
 	JUST_VISITING           Field    = iota
-	ST_CHARIES_PLACE        Property = iota
+	ST_CHARLES_PLACE        Property = iota
 	ELECTRIC_COMPANY        Utility  = iota
 	STATES_AVENUE           Property = iota
 	VIRGINIA_AVENUE         Property = iota
@@ -74,7 +74,7 @@ func (p Property) GetRentCost(ps PropertyState) int {
 	case CONNECTICUT_AVENUE:
 		return []int{8, 40, 100, 300, 450, 600}[ps]
 
-	case ST_CHARIES_PLACE, STATES_AVENUE:
+	case ST_CHARLES_PLACE, STATES_AVENUE:
 		return []int{10, 50, 150, 450, 625, 750}[ps]
 	case VIRGINIA_AVENUE:
 		return []int{12, 60, 180, 500, 700, 900}[ps]
@@ -123,7 +123,7 @@ func (p Property) GetBaseCost() int {
 		return 100
 	case CONNECTICUT_AVENUE:
 		return 120
-	case ST_CHARIES_PLACE, STATES_AVENUE:
+	case ST_CHARLES_PLACE, STATES_AVENUE:
 		return 140
 	case VIRGINIA_AVENUE:
 		return 160
@@ -157,7 +157,7 @@ func (p Property) GetHouseCost() int {
 	switch p {
 	case MEDITERRANEAN_AVENUE, BALTIC_AVENUE, ORIENTAL_AVENUE, VERMONT_AVENUE, CONNECTICUT_AVENUE:
 		return baseHouseCost
-	case ST_CHARIES_PLACE, STATES_AVENUE, VIRGINIA_AVENUE, ST_JAMES_PLACE, TENNESSEE_AVENUE, NEW_YORK_AVENUE:
+	case ST_CHARLES_PLACE, STATES_AVENUE, VIRGINIA_AVENUE, ST_JAMES_PLACE, TENNESSEE_AVENUE, NEW_YORK_AVENUE:
 		return baseHouseCost * 2
 	case KENTUCKY_AVENUE, INDIANA_AVENUE, ILLINOIS_AVENUE, ATLANTIC_AVENUE, VENTNOR_AVENUE, MARVIN_GARDENS:
 		return baseHouseCost * 3

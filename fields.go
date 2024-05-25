@@ -95,7 +95,7 @@ func (f Field) Property() (Property, bool) {
 		ORIENTAL_AVENUE,
 		VERMONT_AVENUE,
 		CONNECTICUT_AVENUE,
-		ST_CHARIES_PLACE,
+		ST_CHARLES_PLACE,
 		STATES_AVENUE,
 		VIRGINIA_AVENUE,
 		ST_JAMES_PLACE,
@@ -151,8 +151,8 @@ func (p Property) Localize(langTag language.Tag) string {
 		return lang.MustLocalize("monopoly.field.vermont_avenue", langTag)
 	case CONNECTICUT_AVENUE:
 		return lang.MustLocalize("monopoly.field.connecticut_avenue", langTag)
-	case ST_CHARIES_PLACE:
-		return lang.MustLocalize("monopoly.field.st_charies_place", langTag)
+	case ST_CHARLES_PLACE:
+		return lang.MustLocalize("monopoly.field.st_charles_place", langTag)
 	case STATES_AVENUE:
 		return lang.MustLocalize("monopoly.field.states_avenue", langTag)
 	case VIRGINIA_AVENUE:
@@ -211,8 +211,8 @@ func (p Property) GoString() string {
 		return "VERMONT_AVENUE"
 	case CONNECTICUT_AVENUE:
 		return "CONNECTICUT_AVENUE"
-	case ST_CHARIES_PLACE:
-		return "ST_CHARIES_PLACE"
+	case ST_CHARLES_PLACE:
+		return "ST_CHARLES_PLACE"
 	case STATES_AVENUE:
 		return "STATES_AVENUE"
 	case VIRGINIA_AVENUE:
