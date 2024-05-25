@@ -49,7 +49,7 @@ func ({{ $type.Name | short }} {{ $type.Name }}) Localize(langTag language.Tag) 
 	case {{ $value }}:
 		return lang.MustLocalize("monopoly.field.{{ $value | lower }}", langTag){{ end }}
 	default:
-		return "UNKNOWN"
+		return lang.MustLocalize("unknown", langTag)
 	}
 }
 

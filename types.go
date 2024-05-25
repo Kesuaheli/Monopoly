@@ -1,5 +1,10 @@
 package monopoly
 
+import (
+	"github.com/Kesuaheli/monopoly/lang"
+	"golang.org/x/text/language"
+)
+
 //go:generate go run genfields.go -type=Field
 
 type Field int8
@@ -185,23 +190,27 @@ const (
 )
 
 func (ps PropertyState) String() string {
+	return ps.Localize(language.English)
+}
+
+func (ps PropertyState) Localize(langTag language.Tag) string {
 	switch ps {
 	case STATE_MORTGAGE:
-		return "mortgaged"
+		return lang.MustLocalize("monopoly.property_state.mortgaged", langTag)
 	case STATE_NORMAL:
-		return "without houses"
+		return lang.MustLocalize("monopoly.property_state.normal", langTag)
 	case STATE_HOUSE_1:
-		return "with 1 house"
+		return lang.MustLocalize("monopoly.property_state.house.1", langTag)
 	case STATE_HOUSE_2:
-		return "with 2 houses"
+		return lang.MustLocalize("monopoly.property_state.house.2", langTag)
 	case STATE_HOUSE_3:
-		return "with 3 houses"
+		return lang.MustLocalize("monopoly.property_state.house.3", langTag)
 	case STATE_HOUSE_4:
-		return "with 4 houses"
+		return lang.MustLocalize("monopoly.property_state.house.4", langTag)
 	case STATE_HOTEL:
-		return "with a hotel"
+		return lang.MustLocalize("monopoly.property_state.hotel", langTag)
 	default:
-		return "UNKNOWN"
+		return lang.MustLocalize("unknown", langTag)
 	}
 }
 

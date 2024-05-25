@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strings"
 	"sync"
+
+	"golang.org/x/text/language"
 )
 
 const startMoney = 5000
@@ -11,15 +13,19 @@ const startMoney = 5000
 type Inventory map[Property]PropertyState
 
 func (inv Inventory) String() string {
+	return inv.Localize(language.English)
+}
+
+func (inv Inventory) Localize(langTag language.Tag) string {
 	if len(inv) == 0 {
 		return "no properties"
 	}
 	var props []string
 	for prop, state := range inv {
 		if state == STATE_NORMAL {
-			props = append(props, prop.String())
+			props = append(props, prop.Localize(langTag))
 		} else {
-			props = append(props, prop.String()+" "+state.String())
+			props = append(props, prop.Localize(langTag)+" "+state.Localize(langTag))
 		}
 	}
 	return strings.Join(props, ", ")
@@ -61,7 +67,7 @@ func InitPlayer(g *Game, t Token) *Player {
 }
 
 func (p *Player) String() string {
-	return fmt.Sprintf("%s ($%d) is on %s and owns %s.", p.token, p.money, p.position.Localize(p.game.Language), p.inventory)
+	return fmt.Sprintf("%s ($%d) is on %s and owns %s.", p.token, p.money, p.position.Localize(p.game.Language), p.inventory.Localize(p.game.Language))
 }
 
 func (p *Player) GoString() string {

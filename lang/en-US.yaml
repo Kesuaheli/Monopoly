@@ -1,3 +1,4 @@
+unknown: UNKNOWN
 monopoly:
   field:
     go: Go
@@ -41,3 +42,11 @@ monopoly:
     luxury_tax: Luxury Tax
     boardwalk: Boardwalk
     in_jail: In Jail
+  property_state:
+    mortgaged: mortgaged
+    normal: without houses
+    house.1: with 1 house
+    house.2: with 2 houses
+    house.3: with 3 houses
+    house.4: with 4 houses
+    hotel: with hotel

@@ -45,7 +45,7 @@ func (f Field) Localize(langTag language.Tag) string {
 	case IN_JAIL:
 		return lang.MustLocalize("monopoly.field.in_jail", langTag)
 	default:
-		return "UNKNOWN"
+		return lang.MustLocalize("unknown", langTag)
 	}
 }
 
@@ -186,7 +186,7 @@ func (p Property) Localize(langTag language.Tag) string {
 	case BOARDWALK:
 		return lang.MustLocalize("monopoly.field.boardwalk", langTag)
 	default:
-		return "UNKNOWN"
+		return lang.MustLocalize("unknown", langTag)
 	}
 }
 
@@ -292,7 +292,7 @@ func (r Railroad) Localize(langTag language.Tag) string {
 	case SHORT_LINE:
 		return lang.MustLocalize("monopoly.field.short_line", langTag)
 	default:
-		return "UNKNOWN"
+		return lang.MustLocalize("unknown", langTag)
 	}
 }
 
@@ -326,7 +326,7 @@ func (u Utility) Localize(langTag language.Tag) string {
 	case WATER_WORKS:
 		return lang.MustLocalize("monopoly.field.water_works", langTag)
 	default:
-		return "UNKNOWN"
+		return lang.MustLocalize("unknown", langTag)
 	}
 }
 

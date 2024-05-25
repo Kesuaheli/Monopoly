@@ -1,3 +1,4 @@
+unknown: UNBEKANNT
 monopoly:
   field:
     go: LOS
@@ -41,3 +42,11 @@ monopoly:
     luxery_tax: Zusatzsteuer
     boardwalk: Schlossallee
     in_jail: Im Gefängnis
+  property_state:
+    mortgaged: belastet
+    normal: ohne Häuser
+    house.1: mit 1 Haus
+    house.2: mit 2 Häusern
+    house.3: mit 3 Häusern
+    house.4: mit 4 Häusern
+    hotel: mit Hotel

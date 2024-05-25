@@ -38,9 +38,19 @@ func loadFiles(path string, format string) {
 	}
 }
 
-func Localize(key string, lang language.Tag) (string, error) {
+// Localizer is implemented by any value that has a Localize method, which, similarly to
+// [fmt.Stringer], defines a readable form of that value. In addition to String, Localize takes an
+// additional parameter langTag which is a [language.Tag] defining in which language to localize to.
+//
+// When implementing Localizer in a type, the String method should be just a call to Localize with a
+// default language, e.g. [language.English], for the langTag parameter.
+type Localizer interface {
+	Localize(langTag language.Tag) string
+}
+
+func Localize(key string, langTag language.Tag) (string, error) {
 	localized, err := i18n.
-		NewLocalizer(bundle, lang.String()).
+		NewLocalizer(bundle, langTag.String()).
 		Localize(&i18n.LocalizeConfig{MessageID: key})
 	if _, ok := err.(*i18n.MessageNotFoundErr); ok {
 		localized = key
@@ -49,8 +59,8 @@ func Localize(key string, lang language.Tag) (string, error) {
 	return localized, err
 }
 
-func MustLocalize(key string, lang language.Tag) string {
-	localized, err := Localize(key, lang)
+func MustLocalize(key string, langTag language.Tag) string {
+	localized, err := Localize(key, langTag)
 	if err != nil {
 		panic(err)
 	}
