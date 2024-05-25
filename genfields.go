@@ -39,13 +39,13 @@ func ({{ $type.Name | short }} {{ $type.Name }}) String() string {
 
 // Localize returns the localized name for {{ $type.Name | short }} in the language langTag.
 func ({{ $type.Name | short }} {{ $type.Name }}) Localize(langTag language.Tag) string {
-	{{ - range $childType := $ }}{{ if eq $childType.Parent $type.Name }}
+	{{- range $childType := $ }}{{ if eq $childType.Parent $type.Name }}
 	if {{ $childType.Name | short }}, ok := {{ $type.Name | short }}.{{ $childType.Name }}(); ok {
 		return {{ $childType.Name | short }}.Localize(langTag)
 	}
 {{ end }}{{ end }}
 	switch {{ $type.Name | short }} {
-	{{ - range $value := $type.Values }}
+	{{- range $value := $type.Values }}
 	case {{ $value }}:
 		return lang.MustLocalize("monopoly.field.{{ $value | lower }}", langTag){{ end }}
 	default:
@@ -55,13 +55,13 @@ func ({{ $type.Name | short }} {{ $type.Name }}) Localize(langTag language.Tag) 
 
 // GoString implements [fmt.GoStringer] interface.
 func ({{ $type.Name | short }} {{ $type.Name }}) GoString() string {
-	{{ - range $childType := $ }}{{ if eq $childType.Parent $type.Name }}
+	{{- range $childType := $ }}{{ if eq $childType.Parent $type.Name }}
 	if {{ $childType.Name | short }}, ok := {{ $type.Name | short }}.{{ $childType.Name }}(); ok {
 		return {{ $childType.Name | short }}.GoString()
 	}
 {{ end }}{{ end }}
 	switch {{ $type.Name | short }} {
-	{{ - range $value := $type.Values }}
+	{{- range $value := $type.Values }}
 	case {{ $value }}:
 		return "{{ $value }}"{{ end }}
 	default:
