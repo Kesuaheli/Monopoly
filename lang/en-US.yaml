@@ -1,5 +1,6 @@
 unknown: UNKNOWN
 monopoly:
+  currency: $%d
   field:
     go: Go
     mediterranean_avenue: Mediterranean Avenue

@@ -1,5 +1,6 @@
 unknown: UNBEKANNT
 monopoly:
+  currency: "%d€"
   field:
     go: LOS
     mediterranean_avenue: Badstraße

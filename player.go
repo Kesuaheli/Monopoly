@@ -5,6 +5,7 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/Kesuaheli/monopoly/lang"
 	"golang.org/x/text/language"
 )
 
@@ -67,15 +68,19 @@ func InitPlayer(g *Game, t Token) *Player {
 }
 
 func (p *Player) String() string {
-	return fmt.Sprintf("%s ($%d) is on %s and owns %s.", p.token.Localize(p.game.Language), p.money, p.position.Localize(p.game.Language), p.inventory.Localize(p.game.Language))
+	return fmt.Sprintf("%s (%s) is on %s and owns %s.", p.token.Localize(p.game.Language), p.GetBalanceString(), p.position.Localize(p.game.Language), p.inventory.Localize(p.game.Language))
 }
 
 func (p *Player) GoString() string {
-	return fmt.Sprintf("{token: %#v, money: $%d, position: %#v, inventory: %#v}", p.token, p.money, p.position, p.inventory)
+	return fmt.Sprintf("{token: %#v, money: %d, position: %#v, inventory: %#v}", p.token, p.money, p.position, p.inventory)
 }
 
 func (p *Player) GetBalance() int {
 	return p.money
+}
+
+func (p *Player) GetBalanceString() string {
+	return fmt.Sprintf(lang.MustLocalize("monopoly.currency", p.game.Language), p.money)
 }
 
 func (p *Player) CanBuyProperty() (bool, Property) {
