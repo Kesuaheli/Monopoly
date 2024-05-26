@@ -30,13 +30,17 @@ func main() {
 			prop := p.Move()
 			buyable, _ := p.CanBuyProperty()
 			fmt.Printf("  - Landed on %s! Buyable: %t\n", prop.Localize(g.Language), buyable)
-		case monopoly.GAME_TURN:
+		case monopoly.GAME_MOVED_TO_NEW_FIELD:
 			if buyable, prop := p.CanBuyProperty(); buyable {
 				p.BuyProperty()
 				fmt.Printf("  - Bought %s\n", prop.Localize(g.Language))
 			} else if prop != -1 {
 				fmt.Printf("  - Didn't buy %s\n", prop.Localize(g.Language))
+				p.Continue()
+			} else {
+				p.Continue()
 			}
+		case monopoly.GAME_TURN:
 			fmt.Print("  - Ended turn\n")
 			if again := p.EndTurn(); !again {
 				turn++

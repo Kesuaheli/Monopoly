@@ -5,6 +5,7 @@ import (
 	"math/rand"
 	"strings"
 
+	"github.com/Kesuaheli/monopoly/lang"
 	"golang.org/x/text/language"
 )
 
@@ -51,6 +52,12 @@ func (g Game) GoString() string {
 		players = append(players, player.GoString())
 	}
 	return "{players: " + strings.Join(players, ", ") + "}"
+}
+
+// FormatCurrency is a helper function to print the given amount of money with the currency symbol
+// for the selected language.
+func (g Game) FormatCurrency(a int) string {
+	return fmt.Sprintf(lang.MustLocalize("monopoly.currency", g.Language), a)
 }
 
 // SetLanguage sets the language used when printing names and messages

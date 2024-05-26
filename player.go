@@ -5,11 +5,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/Kesuaheli/monopoly/lang"
 	"golang.org/x/text/language"
 )
-
-const startMoney = 5000
 
 type Inventory map[Property]PropertyState
 
@@ -68,19 +65,44 @@ func InitPlayer(g *Game, t Token) *Player {
 }
 
 func (p *Player) String() string {
-	return fmt.Sprintf("%s (%s) is on %s and owns %s.", p.token.Localize(p.game.Language), p.GetBalanceString(), p.position.Localize(p.game.Language), p.inventory.Localize(p.game.Language))
+	return fmt.Sprintf("%s (%s) is on %s and owns %s.", p.Token(), p.game.FormatCurrency(p.money), p.position.Localize(p.game.Language), p.inventory.Localize(p.game.Language))
 }
 
 func (p *Player) GoString() string {
 	return fmt.Sprintf("{token: %#v, money: %d, position: %#v, inventory: %#v}", p.token, p.money, p.position, p.inventory)
 }
 
-func (p *Player) GetBalance() int {
-	return p.money
+// Money returns the amount of money the player currently has, formatted with the currency symbol of
+// the selected language.
+func (p *Player) Money() string {
+	return p.game.FormatCurrency(p.money)
 }
 
-func (p *Player) GetBalanceString() string {
-	return fmt.Sprintf(lang.MustLocalize("monopoly.currency", p.game.Language), p.money)
+// Token returns the localized name of the token the player has.
+func (p *Player) Token() string {
+	return p.token.Localize(p.game.Language)
+}
+
+// Railroads returns the amount of railroads the player owns.
+func (p *Player) Railroads() int {
+	var rrCount int
+	for prop := range p.inventory {
+		if _, isRR := prop.Railroad(); isRR {
+			rrCount++
+		}
+	}
+	return rrCount
+}
+
+// Utilities returns the amount of utilities the player owns.
+func (p *Player) Utilities() int {
+	var utilCount int
+	for prop := range p.inventory {
+		if _, isUtil := prop.Utility(); isUtil {
+			utilCount++
+		}
+	}
+	return utilCount
 }
 
 func (p *Player) CanBuyProperty() (bool, Property) {
@@ -206,14 +228,14 @@ func (p *Player) RollDice() (int, int, Field) {
 
 	if d1 == d2 {
 		p.game.doubblesCount++
-		if p.game.doubblesCount == 4 {
+		if p.game.doubblesCount == doubblesCountToJail {
 			return d1, d2, IN_JAIL
 		}
 	} else {
 		p.game.doubblesCount = 0
 	}
 
-	return d1, d2, (p.position + Field(d1+d2)) % IN_JAIL
+	return d1, d2, Field((int(p.position) + d1 + d2) % numberOfFields)
 }
 
 func (p *Player) Move() Field {
@@ -225,9 +247,9 @@ func (p *Player) Move() Field {
 	}
 
 	d1, d2 := p.game.getLastRoll()
-	p.game.state = GAME_TURN
+	p.game.state = GAME_MOVED_TO_NEW_FIELD
 	if d1 == d2 {
-		if p.game.doubblesCount == 4 {
+		if p.game.doubblesCount == doubblesCountToJail {
 			p.position = IN_JAIL
 			p.game.doubblesCount = 0
 			return IN_JAIL
@@ -239,10 +261,61 @@ func (p *Player) Move() Field {
 
 	p.position = p.position + Field(d1+d2)
 	if p.position >= IN_JAIL {
-		fmt.Printf("Player %s crossed %s\n", p.token.Localize(p.game.Language), GO.Localize(p.game.Language))
-		p.position = p.position % IN_JAIL
+		fmt.Printf("Player %s crossed %s\n", p.Token(), GO.Localize(p.game.Language))
+		p.position %= Field(numberOfFields)
+		p.money += moneyOnGo
 	}
+
+	if prop, isProp := p.position.Property(); isProp {
+		propOwner, propState, ok := p.game.GetPlayerForProperty(prop)
+		if !ok || propOwner == p {
+			return p.position
+		}
+		rent := prop.GetRentCost(propState)
+		if _, isRR := prop.Railroad(); isRR {
+			rent *= propOwner.Railroads()
+		} else if _, isUtil := prop.Utility(); isUtil {
+			rent = (propOwner.Utilities()*6 - 2) * (d1 + d2)
+		}
+		fmt.Printf("Player %s owes player %s %s for landing on %s\n",
+			p.Token(),
+			propOwner.Token(),
+			p.game.FormatCurrency(rent),
+			prop.Localize(p.game.Language),
+		)
+		p.money -= rent
+		propOwner.money += rent
+	} else {
+		switch p.position {
+		case INCOME_TAX:
+			p.money -= incomeTax
+		case LUXERY_TAX:
+			p.money -= luxeryTax
+		case CHANCE_1, CHANCE_2, CHANCE_3:
+			fmt.Println("Drawing Chance card...")
+		case COMMUNITY_CHEST_1, COMMUNITY_CHEST_2, COMMUNITY_CHEST_3:
+			fmt.Println("Drawing Community Chest card...")
+		case FREE_PARKING:
+			p.money += moneyOnFreeParking
+		case GO_TO_JAIL:
+			fmt.Printf("Player %s went to jail\n", p.Token())
+			p.position = IN_JAIL
+		}
+	}
+
 	return p.position
+}
+
+// Continue advances the players current turn to the next state.
+func (p *Player) Continue() {
+	if curr, _ := p.game.GetCurrentPlayer(); curr != p {
+		return
+	}
+
+	switch p.game.state {
+	case GAME_MOVED_TO_NEW_FIELD:
+		p.game.state = GAME_TURN
+	}
 }
 
 func (p *Player) EndTurn() (again bool) {
