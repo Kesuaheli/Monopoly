@@ -85,10 +85,12 @@ monopoly:
     weelbarrow: Weelbarrow
     weelbarrow.description: A supporting weelbarrow
   word:
-    language.singular: "a language"
-    field.singular: "a field"
-    token.singular: "a token"
+    language.singular.article.indefinite: "a language"
+    field.singular.article.indefinite: "a field"
+    token.singular.article.indefinite: "a token"
+    player.singular: "player"
+    player.plural: "players"
 cli:
   input.choose: "Choose %s: "
-  input.select: "Select [1-%d]: "
+  input.select: "Select [%d-%d]: "
   input.selected: Selected %s!
