@@ -84,3 +84,11 @@ monopoly:
     unicorn.description: A rare unicorn
     weelbarrow: Weelbarrow
     weelbarrow.description: A supporting weelbarrow
+  word:
+    language.singular: "a language"
+    field.singular: "a field"
+    token.singular: "a token"
+cli:
+  input.choose: "Choose %s: "
+  input.select: "Select [1-%d]: "
+  input.selected: Selected %s!

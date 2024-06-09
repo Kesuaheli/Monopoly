@@ -84,3 +84,11 @@ monopoly:
     unicorn.description: Ein seltenes Einhorn
     weelbarrow: Schubkarre
     weelbarrow.description: Eine unterstützende Schubkarre
+  word:
+    language.singular: "eine Sprace"
+    field.singular: "ein Feld"
+    token.singular: "eine Spielfigur"
+cli:
+  input.choose: "Wähle %s: "
+  input.select: "Wähle [1-%d]: "
+  input.selected: "'%s' gewählt!"

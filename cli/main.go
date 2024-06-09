@@ -2,15 +2,27 @@ package main
 
 import (
 	"fmt"
+	"math"
+	"strconv"
+	"strings"
 
 	"github.com/Kesuaheli/monopoly"
+	"github.com/Kesuaheli/monopoly/lang"
 	"golang.org/x/text/language"
 )
 
+var (
+	selectedLang language.Tag
+)
+
 func main() {
+	selectedLang = selectableInput(lang.MustLocalize("monopoly.word.language.singular", selectedLang), lang.AllLangs(), func(l language.Tag) { selectedLang = l })
+	token := selectableInput(lang.MustLocalize("monopoly.word.token.singular", selectedLang), monopoly.AllTokens(), nil)
+	fmt.Println(token.Description(selectedLang))
+
 	const turns = 100
 	g := monopoly.NewGame(monopoly.CAT, monopoly.UNICORN, monopoly.CAR)
-	g.SetLanguage(language.German)
+	g.SetLanguage(selectedLang)
 	fmt.Printf("\n\nNew game of Monopoly\n%s\n\nsimulating %d random turns...\n\n", g, turns)
 
 	turn := 0
@@ -50,4 +62,40 @@ func main() {
 	}
 
 	fmt.Printf("\n\nEnd of %d turns\n%s\n", turns, g)
+}
+
+func selectableInput[T any](head string, all []T, afterSelection func(selected T)) T {
+	if len(all) == 0 {
+		var t T
+		return t
+	} else if len(all) == 1 {
+		return all[0]
+	}
+
+	selection := strings.Builder{}
+	selection.WriteString(fmt.Sprintf(lang.MustLocalize("cli.input.choose", selectedLang), head))
+	selection.WriteByte('\n')
+	digitsInAll := int(math.Floor(math.Log10(float64(len(all))))) + 1
+	for n, item := range all {
+		selection.WriteString(fmt.Sprintf("- [%*d] %s\n", digitsInAll, n+1, lang.LocalizeInterface(&item, selectedLang)))
+	}
+	fmt.Printf(selection.String())
+
+	var selected T
+	for {
+		fmt.Printf(lang.MustLocalize("cli.input.select", selectedLang), len(all))
+		var bScan []byte
+		fmt.Scan(&bScan)
+		n, err := strconv.ParseInt(string(bScan), 10, 0)
+
+		if err == nil && n > 0 && n <= int64(len(all)) {
+			selected = all[n-1]
+			break
+		}
+	}
+	if afterSelection != nil {
+		afterSelection(selected)
+	}
+	fmt.Printf(lang.MustLocalize("cli.input.selected", selectedLang)+"\n", fmt.Sprintf("%s", lang.LocalizeInterface(selected, selectedLang)))
+	return selected
 }

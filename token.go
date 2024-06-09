@@ -146,3 +146,25 @@ func (t Token) Description(langTag language.Tag) string {
 		return lang.MustLocalize("unknown", langTag)
 	}
 }
+
+// AllTokens returns a slice of all available tokens.
+func AllTokens() []Token {
+	return []Token{
+		BOOT,
+		CAKE,
+		CAR,
+		CAT,
+		DOG,
+		DUCK,
+		HAT,
+		HORSE,
+		IRON,
+		MONEY_BAG,
+		PENGUIN,
+		SHIP,
+		THIMBLE,
+		TRAIN,
+		UNICORN,
+		WEELBARROW,
+	}
+}

@@ -66,3 +66,17 @@ func MustLocalize(key string, langTag language.Tag) string {
 	}
 	return localized
 }
+
+// LocalizeInterface tries to localize v if it's type implements [Localizer]. Otherwise it returns v
+// in the default formatting (using %v).
+func LocalizeInterface(v any, langTag language.Tag) string {
+	if localizer, ok := v.(Localizer); ok {
+		return localizer.Localize(langTag)
+	}
+	return fmt.Sprintf("%v", v)
+}
+
+// AllLangs returns a slice of all loaded languages.
+func AllLangs() []language.Tag {
+	return bundle.LanguageTags()
+}
