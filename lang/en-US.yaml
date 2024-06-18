@@ -91,6 +91,7 @@ monopoly:
     player.singular: "player"
     player.plural: "players"
 cli:
-  input.choose: "Choose %s: "
-  input.select: "Select [%d-%d]: "
-  input.selected: Selected %s!
+  input:
+    choose: "Choose %s: "
+    select: "Select [%d-%d]: "
+    selected: Selected %s!
